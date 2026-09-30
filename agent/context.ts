@@ -162,9 +162,9 @@ function runProbes(git: GitState): { name: string; pass: boolean; detail: string
   try { sh(`rm -f ${JSON.stringify(tmp)}`); } catch { /* best effort */ }
   probes.push({ name: "fs-roundtrip", pass: fsOk, detail: "write+read tmp file" });
   probes.push({
-    name: "vision-evidence",
-    pass: existsSync(join(HERE, "verification", "vision-probe.png")),
-    detail: "agent/verification/vision-probe.png present (sight verified by agent, see CAPABILITIES.md)",
+    name: "verification-record",
+    pass: existsSync(join(HERE, "verification", "CAPABILITIES.md")),
+    detail: "CAPABILITIES.md present — per-session probes (vision/tooling/etc.) recorded there",
   });
   return probes;
 }
@@ -173,7 +173,9 @@ function runProbes(git: GitState): { name: string; pass: boolean; detail: string
 interface Board { objective: string; known: string[]; risks: string[]; open: string[]; next: string[]; }
 
 function buildBoard(git: GitState, files: string[], mem: MemoryEntry[]): Board {
-  const todo = existsSync(TODO_PATH) ? readFileSync(TODO_PATH, "utf8") : "";
+  const todoRaw = existsSync(TODO_PATH) ? readFileSync(TODO_PATH, "utf8") : "";
+  // commented-out tasks are not open tasks
+  const todo = todoRaw.replace(/<!--[\s\S]*?-->/g, "");
   const openItems = lines(todo)
     .filter((l) => /^\s*- \[ \]/.test(l))
     .map((l) => l.replace(/^\s*- \[ \]\s*/, ""));

@@ -62,9 +62,11 @@ agent/memory/session.jsonl     ← full session log (everything)
 agent/verification/            ← vision probe + capability record
 ```
 
-## Verified capabilities (2026-09-30)
+## Capability verification
 
-Image sight (in-image text + colors read back exactly), tooling (Node v22.22.3
-runs the `.ts` passthrough natively; 5/5 probes PASS), context tolerance
-(12,000-line corpus with mid-file sentinel read back), and reasoning probes —
-details and exact evidence in `agent/verification/CAPABILITIES.md`.
+This template ships **fresh**: capabilities are unverified until the first agent
+session probes them. On its first response the agent runs
+`node agent/context.ts --probe` plus the probes listed in
+`agent/verification/CAPABILITIES.md` (image sight, tooling, thinking/frontier,
+context tolerance) and records dated evidence there. The `open questions` block
+of every brief lists whatever is still UNVERIFIED.
