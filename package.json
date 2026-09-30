@@ -1,0 +1,15 @@
+{
+  "name": "repo-template",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Self-describing, agent-first repository template. One TypeScript passthrough replaces the legacy bash ritual before every agent response.",
+  "type": "module",
+  "scripts": {
+    "ctx": "node agent/context.ts",
+    "ctx:probe": "node agent/context.ts --probe",
+    "ctx:json": "node agent/context.ts --json"
+  },
+  "engines": {
+    "node": ">=22.18.0"
+  }
+}
