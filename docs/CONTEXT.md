@@ -13,7 +13,7 @@ plus the passthrough brief.
 | `docs/CONTEXT.md`                 | This file — repo context                                       |
 | `agent/context.ts`                | **The passthrough.** One typed command replacing ~30 bash calls |
 | `agent/memory/session.jsonl`      | Full session log (machine-readable, "everything")              |
-| `agent/verification/`             | Capability probes + evidence (vision probe PNG, CAPABILITIES.md)|
+| `agent/verification/`             | Capability probes + per-session evidence (fresh until first session) |
 
 ## Commands
 
@@ -25,12 +25,15 @@ node agent/context.ts --json          # raw JSON (for programmatic consumption)
 node agent/context.ts --quiet         # brief without doc dumps (big repos)
 ```
 
-## Environment facts (verified live, see CAPABILITIES.md)
+## Environment facts
 
-- Node `v22.22.3` executes `.ts` directly via type stripping → **zero-dependency
-  passthrough**. `npm run ctx` works without `npm install`.
-- git 2.39.5, python3 3.11.2 available in the sandbox.
-- Agent image sight is functional (probe: `agent/verification/vision-probe.png`).
+- Node ≥ 22.18 executes `.ts` via type stripping → **zero-dependency
+  passthrough**. `npm run ctx` works without `npm install`. Confirm per sandbox
+  with `node agent/context.ts --probe`.
+- Other tooling (git, python3, …) is probed per session; nothing is assumed.
+- Agent capabilities (image sight, thinking, context tolerance) are verified
+  per session in `agent/verification/CAPABILITIES.md` — a fresh template
+  starts fully UNVERIFIED.
 
 ## Conventions
 

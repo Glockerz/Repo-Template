@@ -36,8 +36,8 @@ remember what happened, and prove its own capabilities before doing work.
    branch. Commit and push to it only.
 
 6. **Artifact discipline.** Keep generated bloat and large datasets out of Git.
-   Probes that need big corpora write them to `/tmp`, never into the repo. Small
-   evidence artifacts (the vision probe PNG, capability records) are committed.
+  Probes that need big corpora write them to `/tmp`, never into the repo. Small
+  evidence artifacts (probe images, capability records) are committed.
 
 ## Session lifecycle (what every future session does)
 
