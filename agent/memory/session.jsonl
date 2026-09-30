@@ -1,0 +1,3 @@
+{"ts":"2026-09-30T20:39:37.456Z","branch":"arena/01a0f406-repo-template","sha":"7bacb7f","dirty":0,"note":"first probe run during template bootstrap"}
+{"ts":"2026-09-30T20:40:44.269Z","branch":"arena/01a0f406-repo-template","sha":"7bacb7f","dirty":1,"note":"template complete: doctrine+context+ToDo Session Memory+passthrough+README protocol; capabilities verified"}
+{"ts":"2026-09-30T20:41:26.062Z","branch":"arena/01a0f406-repo-template","sha":"7bacb7f","dirty":1,"note":"fixed porcelain leading-space trim bug (EADME.md -> README.md)"}
