@@ -11,7 +11,7 @@
 #include "memory/instance_walker.h"
 #include "memory/pe.h"
 #include "ipc/pipe_server.h"
-#include "inject/param.h"
+#include "inject/loader.h"
 #include "common/log.h"
 #include "common/seh.h"
 
@@ -520,10 +520,12 @@ void Shutdown() {
     inject::SelfUnmapIfManual();
 }
 
-// The scheduler's job handler is a thin forwarder: executor.cpp owns the job
-// handlers, but the rebind pipeline lives here (it needs core state).
-namespace sched::jobs {
-void RebindOnMainThread() { core::RebindOnMainThread(); }
-}  // namespace sched::jobs
+
 
 }  // namespace phetamine::core
+
+// The scheduler's job handler is a thin forwarder: executor.cpp owns the job
+// handlers, but the rebind pipeline lives here because it needs the core's state.
+namespace phetamine::sched::jobs {
+void RebindOnMainThread() { phetamine::core::RebindOnMainThread(); }
+}  // namespace phetamine::sched::jobs

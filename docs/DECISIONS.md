@@ -120,10 +120,13 @@ mechanisms have very different footprints and failure modes.
    bootstrap a C closure is connected to `RunService.Heartbeat` (and
    `PostSimulation`) from inside the VM. The engine then calls us once per frame,
    at a point it already considers legal. No signatures, no patches, no offsets.
-2. **TaskQueue / FrameSite** (reserved). Both need a per-build address in the
-   cache under `sched.taskqueue.insert` / `sched.rendezvous.site`. They are
-   ordered after Heartbeat because they require writing a callback pointer into
-   engine structures.
+2. **TaskQueue / FrameSite** (reserved, not installable yet). Both need a
+   per-build address in the cache under `sched.taskqueue.insert` /
+   `sched.rendezvous.site`, *and* a call from a context that may enter the VM —
+   which the init worker is not. `rendezvous::Install()` therefore reports a
+   cached address and leaves it alone; the strategy has to be wired in the
+   bootstrap alongside Heartbeat. They stay ordered after Heartbeat because they
+   require writing a callback pointer into engine structures.
 3. **APC** (implemented, **off by default**). `QueueUserAPC` on a client thread
    can only run during an alertable wait, which is exactly what makes it *safe*
    for VM work — but most client threads never enter one, so it is a probe, not a

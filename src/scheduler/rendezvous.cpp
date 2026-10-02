@@ -107,41 +107,46 @@ Strategy InstallOnMainThread(lua_State* L, const lua::env::Environment& env) {
         "return ok, err\n";
 
     const int top = api.gettop(L);
-    bool ok = false;
+    char* bytecode = nullptr;
     __try {
-        // load the chunk with genv as its env
-        api.pushvalue(L, kGlobalsIndex);              // [env? no: push env via ref below]
-        api.pop(L, 1);
-        size_t bytecodeSize = 0;
-        char* bytecode = nullptr;
-        if (api.compile) bytecode = api.compile(kChunk, sizeof(kChunk) - 1, nullptr, &bytecodeSize);
-        if (!bytecode || bytecodeSize == 0) {
-            log::Error("rendezvous: compiling the bootstrap chunk failed");
-        } else {
-            lua_State* T = api.newthread(L);
-            if (T) {
-                lua::threads::Add(T);
-                const int status = api.load(T, "=PHETAMINE_BOOTSTRAP", bytecode, bytecodeSize, -1);
-                if (status == lua::kOk) {
-                    if (api.resume(T, L, 0) == lua::kOk) {
-                        ok = api.toboolean ? api.toboolean(T, -2) != 0 : true;
-                        if (!ok && api.tostring) {
-                            const char* err = api.tostring(T, -1);
-                            log::Error("rendezvous: heartbeat connect failed: %s", err ? err : "(no message)");
-                        }
-                    }
-                } else if (api.tostring) {
-                    log::Error("rendezvous: bootstrap chunk did not load: %s", api.tostring(T, -1));
+        // The bootstrap chunk runs on the MAIN state, loaded with genv as its
+        // environment (so `PHETAMINE.internal` resolves). A new thread is not
+        // needed: this code is already running on the client main thread, and
+        // running it in a protected call keeps the main state's stack balanced.
+        if (lua::env::PushGenv(L, env)) {
+            const int envIndex = api.gettop(L);         // [genv]
+            size_t bytecodeSize = 0;
+            if (api.compile) bytecode = api.compile(kChunk, sizeof(kChunk) - 1, nullptr, &bytecodeSize);
+            if (!bytecode || bytecodeSize == 0) {
+                log::Error("rendezvous: compiling the bootstrap chunk failed");
+            } else if (api.load(L, "=PHETAMINE_BOOTSTRAP", bytecode, bytecodeSize, envIndex) != lua::kOk) {
+                const char* err = api.tostring ? api.tostring(L, -1) : nullptr;
+                log::Error("rendezvous: the bootstrap chunk did not load: %s", err ? err : "(no message)");
+                api.pop(L, 1);
+            } else if (api.pcall(L, 0, 2, 0) == lua::kOk) {
+                // the chunk returns ok, err — both on the stack now
+                ok = api.toboolean ? (api.toboolean(L, -2) != 0) : true;
+                if (!ok && api.tostring) {
+                    const char* err = api.tostring(L, -1);
+                    log::Error("rendezvous: connecting RunService.Heartbeat failed: %s",
+                               err ? err : "(no message)");
                 }
-                if (api.resetthread) api.resetthread(T);
-                lua::threads::Remove(T);
+                api.pop(L, 2);
+            } else {
+                const char* err = api.tostring ? api.tostring(L, -1) : nullptr;
+                log::Error("rendezvous: the bootstrap chunk errored: %s", err ? err : "(no message)");
+                api.pop(L, 1);
             }
+        } else {
+            log::Error("rendezvous: genv could not be pushed — no environment to run the bootstrap in");
         }
-        if (api.free_buf && bytecode) api.free_buf(bytecode);
     } __except (EXCEPTION_EXECUTE_HANDLER) {
         ok = false;
-        log::Error("rendezvous: bootstrap faulted — falling back");
+        log::Error("rendezvous: the bootstrap chunk faulted");
     }
+    // The compiled buffer is the client's allocation: it is released on every
+    // path, including the faulted one, or not at all (ADR-2).
+    if (bytecode && api.free_buf) api.free_buf(bytecode);
     __try { api.settop(L, top); } __except (EXCEPTION_EXECUTE_HANDLER) { /* best effort */ }
 
     if (!ok) return Strategy::None;
@@ -175,14 +180,17 @@ Strategy Install() {
     const Strategy armed = g_strategy.load();
     if (armed != Strategy::None) return armed;
 
-    // Reserved strategies, used only when a maintainer has cached an address for
-    // this build (docs/OFFSETS.md §4). Nothing is written through them until
-    // they exist, and their absence is not an error.
-    uintptr_t addr = 0;
-    if (off::CacheGet("sched.rendezvous.site", addr) && addr) {
-        g_strategy.store(Strategy::FrameSite);
-        log::Warn("rendezvous: using a cached frame site at %p — verify it with the canary", (void*)addr);
-        return Strategy::FrameSite;
+    // The reserved strategies (a ScriptContext task-queue insert, a per-frame
+    // call site) both need a per-build address AND a call from a context that is
+    // allowed to enter the VM. This function runs on the init worker, so it can
+    // neither call them nor pretend to: a cached address is reported and left
+    // alone until it can be installed from the bootstrap (docs/DECISIONS.md
+    // ADR-5). Reporting `Armed()` here without a driver would be a lie that makes
+    // EXECUTE hang instead of answering ERROR:Scheduler.
+    uintptr_t site = 0;
+    if (off::CacheGet("sched.rendezvous.site", site) && site) {
+        log::Warn("rendezvous: a frame site is cached for this build (%p) but is not installable "
+                  "from a worker thread; wire it in the bootstrap like Heartbeat", (void*)site);
     }
 
     if (const bool allowApc = false /* PHETAMINE_ALLOW_APC; see DECISIONS ADR-5 */) {
@@ -194,7 +202,7 @@ Strategy Install() {
     }
 
     log::Warn("rendezvous: no strategy armed yet — the bootstrap must run on the client main "
-              "thread to connect the Heartbeat drain (see core::RequestBootstrap)");
+              "thread to connect the Heartbeat drain (the bootstrap in core::BootstrapOnMainThread)");
     return Strategy::None;
 }
 

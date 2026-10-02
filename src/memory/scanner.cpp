@@ -1,4 +1,5 @@
 #include "memory/scanner.h"
+#include "memory/pe.h"
 #include "memory/sigs.h"
 #include "memory/offsets.h"
 #include "common/log.h"

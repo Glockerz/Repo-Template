@@ -162,7 +162,7 @@ void InvokeAsyncCallback(void* raw) {
     lua_State* L = sched::MainState();
     if (L) {
         __try {
-            if (api.rawgeti(L, kRegistryIndex, ctx->callbackRef)) {
+            if (api.rawgeti(L, lua::kRegistryIndex, ctx->callbackRef)) {
                 if (ctx->ok) {
                     if (api.pushlstring) api.pushlstring(L, ctx->body.data(), ctx->body.size());
                     else api.pushstring(L, ctx->body.c_str());

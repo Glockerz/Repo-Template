@@ -9,6 +9,7 @@
 //     the GC walk is gated on a resolved list head and otherwise absent —
 //     `Cap::Gc` stays off until that is configured.
 #include "native_api/api.h"
+#include "ipc/protocol.h"
 #include "lua/state.h"
 #include "lua/env.h"
 #include "scheduler/scheduler.h"

@@ -5,6 +5,7 @@
 // "a/../b" works while "../../windows/system32" cannot escape. A script can only
 // ever touch the workspace it was pointed at.
 #include "native_api/api.h"
+#include "lua/state.h"
 #include "common/log.h"
 
 #include <filesystem>

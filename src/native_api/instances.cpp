@@ -60,7 +60,7 @@ bool PushPlayerGui(lua_State* L) {
 // gethui() → the hidden container, created once per session.
 int l_gethui(lua_State* L) {
     lua::Api& api = lua::GetApi();
-    if (g_huiRef != lua::env::kNoRef && api.rawgeti && api.rawgeti(L, kRegistryIndex, g_huiRef)) {
+    if (g_huiRef != lua::env::kNoRef && api.rawgeti && api.rawgeti(L, lua::kRegistryIndex, g_huiRef)) {
         return 1;                                          // cached
     }
 
