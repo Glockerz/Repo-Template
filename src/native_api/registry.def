@@ -1,0 +1,110 @@
+// native_api/registry.def — the single registration table.
+//
+// Row format (parsed by tools/verify.mjs and included by registry.cpp):
+//
+//     FN(c_symbol, "lua.name", translation_unit, Cap::Capability)
+//
+// `c_symbol` must have an implementation named `l_<c_symbol>` in the named
+// translation unit, with the signature `int l_<c_symbol>(lua_State*)`.
+//
+// Rules that keep this file honest:
+//   * a row here is a promise that the function exists and is probe-gated;
+//   * the lua name must appear in docs/UNC_COVERAGE.md (verify.mjs check 1);
+//   * the capability must be declared in api.h (verify.mjs check 2), and the
+//     function is only registered when that capability passed its canary.
+
+// ---- environment -------------------------------------------------------------
+FN(getgenv,            "getgenv",            env,       Cap::Env)
+FN(getrenv,            "getrenv",            env,       Cap::Env)
+FN(getreg,             "getreg",             env,       Cap::Gc)
+FN(getsenv,            "getsenv",            env,       Cap::Env)
+FN(gettenv,            "gettenv",            env,       Cap::Env)
+FN(getfenv_native,     "getfenv",            env,       Cap::Env)
+FN(setfenv_native,     "setfenv",            env,       Cap::Env)
+FN(getgc,              "getgc",              env,       Cap::Gc)
+FN(shadow_print,       "print",              env,       Cap::Env)
+FN(shadow_warn,        "warn",               env,       Cap::Env)
+FN(shadow_error,       "error",              env,       Cap::Env)
+
+// ---- identity ----------------------------------------------------------------
+FN(getidentity,        "getidentity",        identity,  Cap::Identity)
+FN(setidentity,        "setidentity",        identity,  Cap::Identity)
+FN(getthreadidentity,  "getthreadidentity",  identity,  Cap::Identity)
+FN(setthreadidentity,  "setthreadidentity",  identity,  Cap::Identity)
+FN(getthreadcontext,   "getthreadcontext",   identity,  Cap::Identity)
+
+// ---- closures ----------------------------------------------------------------
+FN(iscclosure,         "iscclosure",         closures,  Cap::Closures)
+FN(islclosure,         "islclosure",         closures,  Cap::Closures)
+FN(newcclosure,        "newcclosure",        closures,  Cap::Closures)
+FN(clonefunction,      "clonefunction",      closures,  Cap::Closures)
+FN(hookfunction,       "hookfunction",       closures,  Cap::Hooks)
+FN(unhookfunction,     "unhookfunction",     closures,  Cap::Hooks)
+FN(checkcaller,        "checkcaller",        closures,  Cap::Closures)
+FN(isexecutorclosure,  "isexecutorclosure",  closures,  Cap::Closures)
+FN(getcallingscript,   "getcallingscript",   closures,  Cap::Closures)
+FN(debug_info,         "debug.info",         closures,  Cap::Closures)
+FN(debug_traceback,    "debug.traceback",    closures,  Cap::Closures)
+FN(getscriptclosure,   "getscriptclosure",   closures,  Cap::Closures)
+
+// ---- metatable ---------------------------------------------------------------
+FN(getrawmetatable,    "getrawmetatable",    metatable, Cap::Metatable)
+FN(setrawmetatable,    "setrawmetatable",    metatable, Cap::Metatable)
+FN(hookmetamethod,     "hookmetamethod",     metatable, Cap::Metatable)
+FN(getnamecallmethod,  "getnamecallmethod",  metatable, Cap::Metatable)
+FN(setnamecallmethod,  "setnamecallmethod",  metatable, Cap::Metatable)
+FN(setreadonly,        "setreadonly",        metatable, Cap::Metatable)
+FN(isreadonly,         "isreadonly",         metatable, Cap::Metatable)
+
+// ---- instances ---------------------------------------------------------------
+FN(gethui,             "gethui",             instances, Cap::Instances)
+FN(cloneref,           "cloneref",           instances, Cap::Instances)
+FN(compareinstances,   "compareinstances",   instances, Cap::Instances)
+FN(getinstances,       "getinstances",       instances, Cap::Instances)
+FN(getnilinstances,    "getnilinstances",    instances, Cap::Instances)
+FN(firetouchinterest,  "firetouchinterest",  instances, Cap::Instances)
+FN(getcallbackvalue,   "getcallbackvalue",   instances, Cap::Instances)
+FN(getconnections,     "getconnections",     instances, Cap::Instances)
+FN(fireclickdetector,  "fireclickdetector",  instances, Cap::Instances)
+FN(fireproximityprompt,"fireproximityprompt",instances, Cap::Instances)
+
+// ---- net ---------------------------------------------------------------------
+FN(request,            "request",            net,       Cap::Net)
+FN(httpget,            "httpget",            net,       Cap::Net)
+FN(httppost,           "httppost",           net,       Cap::Net)
+FN(httpgetasync,       "httpgetasync",       net,       Cap::Net)
+FN(getasync,           "getasync",           net,       Cap::Net)
+FN(postasync,          "postasync",          net,       Cap::Net)
+
+// ---- filesystem --------------------------------------------------------------
+FN(readfile,           "readfile",           fs,        Cap::Fs)
+FN(writefile,          "writefile",          fs,        Cap::Fs)
+FN(appendfile,         "appendfile",         fs,        Cap::Fs)
+FN(listfiles,          "listfiles",          fs,        Cap::Fs)
+FN(isfile,             "isfile",             fs,        Cap::Fs)
+FN(isfolder,           "isfolder",           fs,        Cap::Fs)
+FN(makefolder,         "makefolder",         fs,        Cap::Fs)
+FN(delfile,            "delfile",            fs,        Cap::Fs)
+FN(delfolder,          "delfolder",          fs,        Cap::Fs)
+
+// ---- misc --------------------------------------------------------------------
+FN(identifyexecutor,   "identifyexecutor",   misc,      Cap::Misc)
+FN(getexecutorname,    "getexecutorname",    misc,      Cap::Misc)
+FN(setclipboard,       "setclipboard",       misc,      Cap::Misc)
+FN(messagebox,         "messagebox",         misc,      Cap::Misc)
+FN(getfpscap,          "getfpscap",          misc,      Cap::Misc)
+FN(setfpscap,          "setfpscap",          misc,      Cap::Misc)
+FN(queue_on_teleport,  "queue_on_teleport",  misc,      Cap::Misc)
+FN(securecall,         "securecall",         misc,      Cap::Misc)
+FN(isrbxactive,        "isrbxactive",        misc,      Cap::Misc)
+FN(hash,               "hash",               misc,      Cap::Misc)
+FN(crypt_b64_encode,   "crypt.base64encode", misc,      Cap::Misc)
+FN(crypt_b64_decode,   "crypt.base64decode", misc,      Cap::Misc)
+FN(crypt_encrypt,      "crypt.encrypt",      misc,      Cap::Misc)
+FN(crypt_decrypt,      "crypt.decrypt",      misc,      Cap::Misc)
+FN(crypt_generatekey,  "crypt.generatekey",  misc,      Cap::Misc)
+FN(crypt_generateiv,   "crypt.generateiv",   misc,      Cap::Misc)
+
+// ---- executor plumbing -------------------------------------------------------
+FN(loadstring_native,  "loadstring",         misc,      Cap::Core)
+FN(capability,         "PHETAMINE.capability", misc,     Cap::Core)

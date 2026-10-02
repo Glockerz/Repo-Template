@@ -1,0 +1,45 @@
+{
+  "_note": "EXCERPT of a public dump, transcribed verbatim (decimal values) from https://offsets.imtheo.lol/version-02c37bc51a384b8f/offsets.json on 2026-10-02. Kept in-repo so the offset pipeline is testable offline; it is NOT a full dump. Refresh with tools/offsets/fetch_offsets.mjs.",
+  "Source": "https://offsets.imtheo.lol",
+  "Roblox Version": "version-02c37bc51a384b8f",
+  "Dumper Version": "2.2.4",
+  "Dumped With": "RbxDumperV2",
+  "Dumped At": "20:12 29/09/2026",
+  "Total Offsets": 392,
+  "Offsets": {
+    "TaskScheduler": { "Pointer": 145748640, "JobStart": 200, "JobEnd": 208, "JobName": 24, "MaxFPS": 176 },
+    "VisualEngine": { "Pointer": 140038664, "Dimensions": 2832, "ViewMatrix": 432, "RenderView": 3120, "FakeDataModel": 2800 },
+    "FakeDataModel": { "Pointer": 146098560, "RealDataModel": 504 },
+    "DataModel": {
+      "PlaceId": 392, "GameId": 384, "CreatorId": 376, "GameLoaded": 1488, "JobId": 272,
+      "Workspace": 336, "ScriptContext": 1088, "PlaceVersion": 420, "ServerIP": 1464,
+      "ToRenderView1": 448, "ToRenderView2": 8, "ToRenderView3": 40, "PrimitiveCount": 1048
+    },
+    "Instance": {
+      "This": 8, "NameContainer": 112, "Name": 8, "ChildrenStart": 120, "ChildrenEnd": 8,
+      "Parent": 104, "ClassDescriptor": 24, "ClassName": 8, "ClassBase": 432
+    },
+    "Misc": { "StringLength": 16, "Adornee": 224, "Value": 168, "AnimationId": 176 },
+    "Player": { "LocalPlayer": 288, "UserId": 192, "DisplayName": 296, "Team": 712, "TeamColor": 928, "Mouse": 4616 },
+    "RunService": { "HeartbeatTask": 224, "HeartbeatFPS": 200 },
+    "RenderJob": { "RenderView": 472, "FakeDataModel": 56, "RealDataModel": 496 },
+    "Workspace": { "World": 1024, "ReadOnlyGravity": 2488, "DistributedGameTime": 1224, "CurrentCamera": 1192 },
+    "Script": { "GUID": 192, "Hash": 400, "ByteCode": 0 },
+    "LocalScript": { "GUID": 192, "Hash": 400, "ByteCode": 0 },
+    "ModuleScript": { "IsCoreScript": 0, "GUID": 192, "Hash": 848, "ByteCode": 0 },
+    "ByteCode": { "Size": 40, "Pointer": 16 },
+    "ClickDetector": { "MaxActivationDistance": 216, "MouseIcon": 184 },
+    "ProximityPrompt": {
+      "ActionText": 160, "ObjectText": 192, "HoldDuration": 272, "MaxActivationDistance": 280,
+      "KeyCode": 276, "GamepadKeyCode": 268, "Enabled": 294, "RequiresLineOfSight": 295
+    },
+    "Humanoid": {
+      "Health": 384, "MaxHealth": 408, "Walkspeed": 448, "WalkspeedCheck": 924, "JumpPower": 404,
+      "JumpHeight": 400, "HipHeight": 388, "HumanoidRootPart": 1112, "DisplayName": 168
+    },
+    "BasePart": { "Primitive": 376, "Transparency": 288, "Color3": 408, "Shape": 424 },
+    "Primitive": { "Position": 212, "Size": 444, "Owner": 528, "Rotation": 176 },
+    "ScriptContext": { "RequireBypass": 0 },
+    "MouseService": { "SensitivityPointer": 0, "InputObject": 224, "InputObject2": 240, "MousePosition": 196 }
+  }
+}
