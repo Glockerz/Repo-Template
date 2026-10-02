@@ -1,0 +1,2 @@
+{"ts":"2026-10-02T02:03:07.895Z","branch":"arena/01a0fa58-repo-template","sha":"1f6995b","dirty":0,"note":"session start: PHETAMINE native-internal executor request received; running Repo-Template protocol + first-session capability probes before scope decision"}
+{"ts":"2026-10-02T02:26:35.181Z","branch":"arena/01a0fa58-repo-template","sha":"1f6995b","dirty":5,"note":"PHETAMINE tree complete (uncompiled): core/scheduler/executor/ipc/native_api/net/inject written; loader stub + check_module + crossref + UI; npm test green (verify 10/10); next: Windows build."}

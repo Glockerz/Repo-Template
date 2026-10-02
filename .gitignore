@@ -4,3 +4,14 @@ build/
 coverage/
 *.log
 .DS_Store
+
+# generated build inputs (CMake regenerates these; see docs/ARCHITECTURE.md)
+src/memory/offsets_table.inc
+src/inject/blob/*.inc
+src/inject/blob/*.bin
+
+# the .NET UI (Debug-only build output)
+ui/**/bin/
+ui/**/obj/
+*.user
+.vs/

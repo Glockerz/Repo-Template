@@ -1,13 +1,21 @@
 {
   "name": "repo-template",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
-  "description": "Self-describing, agent-first repository template. One TypeScript passthrough replaces the legacy bash ritual before every agent response.",
+  "description": "Self-describing, agent-first repository template, now carrying the PHETAMINE native-internal executor design. One TypeScript passthrough replaces the legacy bash ritual before every agent response.",
   "type": "module",
   "scripts": {
     "ctx": "node agent/context.ts",
     "ctx:probe": "node agent/context.ts --probe",
-    "ctx:json": "node agent/context.ts --json"
+    "ctx:json": "node agent/context.ts --json",
+    "verify": "node tools/verify.mjs",
+    "selftest": "node tools/selftest.mjs",
+    "test": "node tools/selftest.mjs && node tools/verify.mjs && node tools/gen/crossref.mjs --strict",
+    "offsets:fetch": "node tools/offsets/fetch_offsets.mjs",
+    "offsets:header": "node tools/offsets/gen_offsets_header.mjs --check",
+    "shellcode:check": "node tools/gen/shellcode_blob.mjs --self-test",
+    "crossref": "node tools/gen/crossref.mjs --strict",
+    "check:module": "node tools/gen/check_module.mjs --self-test"
   },
   "engines": {
     "node": ">=22.18.0"

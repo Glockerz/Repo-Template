@@ -1,0 +1,44 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <AssemblyName>PHETAMINEUI</AssemblyName>
+    <RootNamespace>PhetamineUI</RootNamespace>
+    <Platforms>x64</Platforms>
+    <PlatformTarget>x64</PlatformTarget>
+    <!-- The UI must never be built Release: see ui/PHETAMINEUI/README.md § Debug only. -->
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <!--
+    Hard stop, not a warning. A Release build of the UI would sit in
+    bin/Release next to the DLL it injects, which is exactly the layout the
+    project forbids: the UI is a debugging tool and shipping it is out of scope.
+  -->
+  <Target Name="RefuseReleaseConfiguration" BeforeTargets="PrepareForBuild"
+          Condition="'$(Configuration)' != 'Debug'">
+    <Error Text="PHETAMINEUI is Debug-only by design (docs/DECISIONS.md ADR-1, README.md § Scope). Build with: dotnet build -c Debug" />
+  </Target>
+
+  <!--
+    The two binaries the injector needs are build OUTPUTS, not sources:
+      * PHETAMINE.dll          — the module to map (built by CMake, Windows only)
+      * PHETAMINE.stub.bin     — the loader blob (tools/gen/shellcode_blob.mjs)
+    They are looked for next to the UI executable at runtime, and their absence is
+    a clear error message rather than a silent half-injection.
+  -->
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)..\..\build\PHETAMINE.dll"
+          Condition="Exists('$(MSBuildThisFileDirectory)..\..\build\PHETAMINE.dll')"
+          CopyToOutputDirectory="PreserveNewest" Link="PHETAMINE.dll" />
+    <None Include="$(MSBuildThisFileDirectory)..\..\build\PHETAMINE.stub.bin"
+          Condition="Exists('$(MSBuildThisFileDirectory)..\..\build\PHETAMINE.stub.bin')"
+          CopyToOutputDirectory="PreserveNewest" Link="PHETAMINE.stub.bin" />
+  </ItemGroup>
+
+</Project>
