@@ -53,7 +53,7 @@ bool PrepareShadow(lua_State* L, int genvIndex, const char* left) {
 
     // shadow.__index = renv[left]  (the engine's table, read-only for us)
     api.createtable(L, 0, 1);                       // [genv][shadow][mt]
-    api.pushvalue(L, kGlobalsIndex);                // [..][mt][renv]
+    api.pushvalue(L, lua::kGlobalsIndex);                // [..][mt][renv]
     if (api.getfield) api.getfield(L, -1, left);    // [..][mt][renv][engine]
     api.pop(L, 1);                                  // [..][mt][engine]
     api.setfield(L, -2, "__index");                 // [..][mt]
@@ -143,7 +143,7 @@ bool Add(lua_State* L, Registrar& r, const char* luaName, int (*fn)(lua_State*),
         return false;
     }
 
-    if (!api.rawgeti(L, kRegistryIndex, r.tableRef)) return false;   // [tbl]
+    if (!api.rawgeti(L, lua::kRegistryIndex, r.tableRef)) return false;   // [tbl]
 
     const char* dot = std::strchr(luaName, '.');
     if (!dot) {
@@ -228,7 +228,7 @@ bool InstallPhetaminetable(lua_State* L, const lua::env::Environment& env) {
 // ---- argument helpers ---------------------------------------------------------
 int ArgCheck(lua_State* L, int index, int expectedType, const char* fnName) {
     lua::Api& api = lua::GetApi();
-    const int actual = api.type ? api.type(L, index) : kTypeNil;
+    const int actual = api.type ? api.type(L, index) : lua::kTypeNil;
     if (actual != expectedType) {
         char message[256];
         std::snprintf(message, sizeof(message), "%s: bad argument #%d (type %d expected, got %d)",

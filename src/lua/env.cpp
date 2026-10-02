@@ -119,6 +119,16 @@ bool BuildEnvironment(lua_State* L, Environment& out) {
     return true;
 }
 
+// The live session environment. core owns the lifecycle: it calls SetSession on
+// the main thread after BuildEnvironment and before any script can run, and
+// ReleaseEnvironment+SetSession({}) on shutdown/rebind.
+namespace {
+Environment g_session{};
+}
+
+void SetSession(const Environment& env) { g_session = env; }
+const Environment& Session() { return g_session; }
+
 bool PushGenv(lua_State* L, const Environment& env) {
     return PushRef(L, env.genvRef);
 }

@@ -1,4 +1,5 @@
 #include "lua/state.h"
+#include "memory/pe.h"
 #include "lua/layout.h"
 #include "memory/offsets.h"
 #include "memory/scanner.h"

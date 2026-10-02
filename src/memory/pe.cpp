@@ -1,4 +1,5 @@
 #include "memory/pe.h"
+#include "common/seh.h"
 #include "common/log.h"
 
 #include <cstring>

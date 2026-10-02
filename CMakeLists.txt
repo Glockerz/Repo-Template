@@ -54,6 +54,7 @@ set(PHETAMINE_SOURCES
     src/lua/state.cpp
     src/lua/env.cpp
     src/lua/identity.cpp
+    src/lua/threads.cpp
 
     src/scheduler/scheduler.cpp
     src/scheduler/rendezvous.cpp
