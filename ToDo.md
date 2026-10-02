@@ -43,4 +43,5 @@ are mirrored here; the full unpruned log lives in `agent/memory/session.jsonl`.
 <!-- session-log:start -->
 - 2026-10-02T02:03:07.895Z · arena/01a0fa58-repo-template@1f6995b · session start: PHETAMINE native-internal executor request received; running Repo-Template protocol + first-session capability probes before scope decision (dirty:0)
 - 2026-10-02T02:26:35.181Z · arena/01a0fa58-repo-template@1f6995b · PHETAMINE tree complete (uncompiled): core/scheduler/executor/ipc/native_api/net/inject written; loader stub + check_module + crossref + UI; npm test green (verify 10/10); next: Windows build. (dirty:5)
+- 2026-10-02T02:28:11.256Z · arena/01a0fa58-repo-template@ad246a1 · Pre-compile audit pass: missing includes, namespace placement (sched::jobs::RebindOnMainThread), env::SetSession definitions, rendezvous bootstrap env index fixed; lua/threads.cpp added to CMakeLists; npm test green. (dirty:0)
 <!-- session-log:end -->
